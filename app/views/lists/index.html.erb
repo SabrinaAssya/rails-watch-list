@@ -1,0 +1,9 @@
+<div class="container">
+  <h1>Lists:</h1>
+  <% @lists.each do |list| %>
+    <li class = card><%= list.name %></li>
+    <p>
+      <%= link_to "Show this list", list, class: "btn btn-primary" %>
+    </p>
+  <% end %>
+</div>

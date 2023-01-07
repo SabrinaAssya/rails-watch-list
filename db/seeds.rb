@@ -6,14 +6,27 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-require 'rest-client'
+require "json"
+require "open-uri"
+require 'openssl'
+silence_warnings do
+  OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE unless Rails.env.production?
+end
+
+puts "Cleaning database 🗑️"
+Movie.destroy_all
 
 puts "Getting Movies data 🎥"
 
 def movies_dataset
-  movies = RestClient.get("https://tmdb.lewagon.com./movie/top_rated")
-  movies_array = JSON.parse(movies)["results"]
-  movies_array.each do |m|
+  url = "https://tmdb.lewagon.com./movie/top_rated"
+  movies_serialized = URI.open(url).read
+  movies = JSON.parse(movies_serialized)
+  # movies = RestClient.get("https://tmdb.lewagon.com./movie/top_rated")
+  # movies_array = JSON.parse(movies)["results"]
+  # puts movies_array
+  movies_results = movies["results"]
+  movies_results.each do |m|
     Movie.create(
       title: m["name"],
       overview: m["overview"],
