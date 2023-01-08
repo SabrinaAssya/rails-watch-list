@@ -26,9 +26,10 @@ def movies_dataset
   # movies_array = JSON.parse(movies)["results"]
   # puts movies_array
   movies_results = movies["results"]
+  # puts movies_results
   movies_results.each do |m|
-    Movie.create(
-      title: m["name"],
+    Movie.create!(
+      title: m["title"],
       overview: m["overview"],
       poster_url: m["poster_path"],
       rating: m["vote_average"]
